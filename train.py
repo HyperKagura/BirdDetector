@@ -82,7 +82,7 @@ test_generator = test_datagen.flow_from_directory(TEST_DIR,
                                                   class_mode='binary')
 
 history = model.fit_generator(train_generator,
-                              epochs=5,
+                              epochs=25,
                               steps_per_epoch=8,
                               verbose=1,
                               validation_data=test_generator)
