@@ -54,10 +54,11 @@ model = tf.keras.models.Sequential([
         tf.keras.layers.MaxPooling2D(2,2),
         tf.keras.layers.Conv2D(32, (3,3), activation="relu"),
         tf.keras.layers.MaxPooling2D(2,2),
-        tf.keras.layers.Conv2D(64, (3,3), activation="relu"),
-        tf.keras.layers.MaxPooling2D(2,2),
+        #tf.keras.layers.Conv2D(64, (3,3), activation="relu"),
+        #tf.keras.layers.MaxPooling2D(2,2),
         tf.keras.layers.Flatten(),
-        tf.keras.layers.Dense(256, activation="relu"),
+        tf.keras.layers.Dropout(0.2),
+        tf.keras.layers.Dense(64, activation="relu"),
         tf.keras.layers.Dense(1, activation="sigmoid")
 ])
 
@@ -82,7 +83,7 @@ test_generator = test_datagen.flow_from_directory(TEST_DIR,
                                                   class_mode='binary')
 
 history = model.fit_generator(train_generator,
-                              epochs=25,
+                              epochs=40,
                               steps_per_epoch=8,
                               verbose=1,
                               validation_data=test_generator)
@@ -94,15 +95,17 @@ test_loss = history.history['val_loss']
 
 x_epochs = range(len(acc))
 
-plt.plot(x_epochs, acc, 'r', "Training Accuracy")
-plt.plot(x_epochs, test_acc, 'b', "Test Accuracy")
+plt.plot(x_epochs, acc, 'r', label="Training Accuracy")
+plt.plot(x_epochs, test_acc, 'b', label="Test Accuracy")
 plt.title('Training and Test Accuracy')
+plt.legend(loc=0)
 plt.savefig('data/accuracy.png')
 plt.figure()
 
-plt.plot(x_epochs, loss, 'r', "Training Loss")
-plt.plot(x_epochs, test_loss, 'b', "Test Loss")
+plt.plot(x_epochs, loss, 'r', label="Training Loss")
+plt.plot(x_epochs, test_loss, 'b', label="Test Loss")
 plt.title('Training and Test Loss')
+plt.legend(loc=0)
 plt.savefig('data/loss.png')
 
 model.save('data/model.h5')
